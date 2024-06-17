@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stopwatch</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+            margin: 0;
+        }
+        .stopwatch {
+            text-align: center;
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .time {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+        .buttons {
+            display: flex;
+            gap: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .start {
+            background-color: #4caf50;
+            color: white;
+        }
+        .pause {
+            background-color: #ff9800;
+            color: white;
+        }
+        .stop {
+            background-color: #f44336;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="stopwatch">
+        <div class="time" id="time">00:00:00</div>
+        <div class="buttons">
+            <button class="start" onclick="start()">Start</button>
+            <button class="pause" onclick="pause()">Pause</button>
+            <button class="stop" onclick="stop()">Stop</button>
+        </div>
+    </div>
+
+    <script>
+        let timer;
+        let isRunning = false;
+        let startTime;
+        let elapsedTime = 0;
+
+        function updateTime() {
+            const currentTime = new Date().getTime();
+            const time = elapsedTime + (currentTime - startTime);
+            const hours = Math.floor(time / (1000 * 60 * 60));
+            const minutes = Math.floor((time % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((time % (1000 * 60)) / 1000);
+
+            document.getElementById('time').textContent =
+                `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+        }
+
+        function start() {
+            if (!isRunning) {
+                isRunning = true;
+                startTime = new Date().getTime();
+                timer = setInterval(updateTime, 1000);
+            }
+        }
+
+        function pause() {
+            if (isRunning) {
+                isRunning = false;
+                clearInterval(timer);
+                elapsedTime += new Date().getTime() - startTime;
+            }
+        }
+
+        function stop() {
+            isRunning = false;
+            clearInterval(timer);
+            elapsedTime = 0;
+            document.getElementById('time').textContent = '00:00:00';
+        }
+    </script>
+</body>
+</html>
